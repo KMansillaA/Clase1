@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejemplo de HTML5</title>
+</head>
+<body>
+    <header>
+        <h1>Bienvenidos a mi página</h1>
+        <nav>
+            <ul>
+                <li><a href="#section1">Sección 1</a></li>
+                <li><a href="#section2">Sección 2</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <article id="section1">
+        <header>
+            <h2>Artículo 1: Introducción a HTML5</h2>
+        </header>
+        <section>
+            <h3>¿Qué es HTML5?</h3>
+            <p>HTML5 es la última versión de HTML, un lenguaje utilizado para crear páginas web. HTML5 introduce nuevas etiquetas semánticas, soporte para multimedia y mejora en la accesibilidad y el desarrollo web.</p>
+        </section>
+        <footer>
+            <p>Publicado por: Autor A</p>
+        </footer>
+    </article>
+
+    <article id="section2">
+        <header>
+            <h2>Artículo 2: Multimedia en HTML5</h2>
+        </header>
+        <section>
+            <h3>Audio y Video</h3>
+            <p>HTML5 facilita la inserción de multimedia en páginas web mediante las etiquetas <code>&lt;audio&gt;</code> y <code>&lt;video&gt;</code>.</p>
+            <video width="320" height="240" controls>
+                <source src="./video/video.mp4" type="video/mp4">
+                Tu navegador no soporta el elemento de video.
+            </video>
+            <br>
+            <audio controls>
+                <source src="./audio/audio.mp3" type="audio/mp3">
+                Tu navegador no soporta el elemento de audio.
+            </audio>
+        </section>
+
+        <section>
+            <h3>Uso del Canvas</h3>
+            <canvas id="miCanvas" width="300" height="200" style="border:1px solid #000;"></canvas>
+            <script>
+                var canvas = document.getElementById("miCanvas");
+                var ctx = canvas.getContext("2d");
+                ctx.fillStyle = "#FF0000";
+                ctx.fillRect(50, 50, 200, 100);
+            </script>
+        </section>
+
+        <footer>
+            <p>Publicado por: Autor B</p>
+        </footer>
+    </article>
+
+    <section>
+        <h2>Formulario de Contacto</h2>
+        <form id="contactoForm">
+            <label for="email">Correo Electrónico:</label>
+            <input type="email" id="email" name="email" required>
+            <br><br>
+    
+            <label for="fecha">Fecha de Nacimiento:</label>
+            <input type="date" id="fecha" name="fecha">
+            <br><br>
+    
+            <label for="cantidad">Cantidad:</label>
+            <input type="number" id="cantidad" name="cantidad" min="1" max="100" required>
+            <br><br>
+    
+            <input type="submit" value="Guardar">
+        </form>
+        
+        <h3>Datos Guardados:</h3>
+        <p><strong>Correo Electrónico:</strong> <span id="mostrarEmail"></span></p>
+        <p><strong>Fecha de Nacimiento:</strong> <span id="mostrarFecha"></span></p>
+        <p><strong>Cantidad:</strong> <span id="mostrarCantidad"></span></p>
+    
+        <button id="borrarDatos">Borrar Datos</button> <!-- Botón para limpiar localStorage -->
+    </section>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Cargar datos guardados en LocalStorage
+            document.getElementById("email").value = localStorage.getItem("email") ?? "";
+            document.getElementById("fecha").value = localStorage.getItem("fecha") ?? "";
+            document.getElementById("cantidad").value = localStorage.getItem("cantidad") ?? "";
+    
+            document.getElementById("mostrarEmail").textContent = localStorage.getItem("email") ?? "No guardado";
+            document.getElementById("mostrarFecha").textContent = localStorage.getItem("fecha") ?? "No guardado";
+            document.getElementById("mostrarCantidad").textContent = localStorage.getItem("cantidad") ?? "No guardado";
+        });
+    
+        document.getElementById("contactoForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Evita el envío del formulario
+    
+            // Guardar datos en LocalStorage
+            let email = document.getElementById("email").value;
+            let fecha = document.getElementById("fecha").value;
+            let cantidad = document.getElementById("cantidad").value;
+    
+            if (!email || !cantidad) {
+                alert("Por favor, completa todos los campos requeridos.");
+                return;
+            }
+    
+            localStorage.setItem("email", email);
+            localStorage.setItem("fecha", fecha);
+            localStorage.setItem("cantidad", cantidad);
+    
+            // Mostrar los datos guardados
+            document.getElementById("mostrarEmail").textContent = email;
+            document.getElementById("mostrarFecha").textContent = fecha;
+            document.getElementById("mostrarCantidad").textContent = cantidad;
+    
+            alert("Datos guardados en LocalStorage ✅");
+        });
+    
+        document.getElementById("borrarDatos").addEventListener("click", function() {
+            localStorage.clear();
+            document.getElementById("email").value = "";
+            document.getElementById("fecha").value = "";
+            document.getElementById("cantidad").value = "";
+    
+            document.getElementById("mostrarEmail").textContent = "No guardado";
+            document.getElementById("mostrarFecha").textContent = "No guardado";
+            document.getElementById("mostrarCantidad").textContent = "No guardado";
+    
+            alert("Datos borrados 🗑️");
+        });
+    </script>
+    
+
+    <section>
+        <h2>Geolocalización</h2>
+        <button onclick="obtenerUbicacion()">Obtener mi ubicación</button>
+        <p id="ubicacion"></p>
+        <script>
+            function obtenerUbicacion() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(mostrarPosicion);
+                } else {
+                    alert("Geolocalización no es soportada por este navegador.");
+                }
+            }
+
+            function mostrarPosicion(position) {
+                var latitud = position.coords.latitude;
+                var longitud = position.coords.longitude;
+                document.getElementById("ubicacion").innerHTML = "Latitud: " + latitud + "<br>Longitud: " + longitud;
+                // Guardar la ubicación en el localStorage
+                localStorage.setItem('ubicacion', JSON.stringify({ latitud: latitud, longitud: longitud }));
+            }
+        </script>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Mi Página Web</p>
+    </footer>
+</body>
+</html>
